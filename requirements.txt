@@ -1,6 +1,1 @@
-opencv-python~=4.8.0.76
-numpy~=1.25.2
-ultralytics~=8.0.162
-Pillow~=9.5.0
-ipython~=8.14.0
-mediapipe~=0.10.3
+opencv-python==4.8.0.76

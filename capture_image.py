@@ -1,10 +1,7 @@
 # import datatime and timedelta package
 from datetime import datetime, timedelta
 # import opencv, argparse and time package
-import cv2, argparse, time
-# Import mediapipe package
-import mediapipe as mp
-# import os
+import cv2, argparse
 import os
 
 
@@ -21,44 +18,28 @@ class CaptureImage:
         many times this script has to run 2: a path where
         images need to be stored
         """
-
+        # calculating end time of image capture
         new_time = (datetime.now() + timedelta(seconds=int(time_till))).strftime("%H:%M:%S")
-
-        count = 0
-
-        mp_pose = mp.solutions.pose
-        pose = mp_pose.Pose()
-        mp_draw = mp.solutions.drawing_utils
-
         cap = cv2.VideoCapture(0)
 
         while True:
             # full_time is using to add hour_minute_second of system in image file name
             full_time = "_".join((str(datetime.now().hour), str(datetime.now().minute),
                                   str(datetime.now().second)))
+            # image format
             suffix = '.jpg'
             base_filename = "image_" + full_time
+            # preparing file name with path
             file_name = os.path.join(image_path, base_filename + suffix)
-            # print(img_full_name)
-            count = count + 1
             if datetime.now().strftime("%H:%M:%S") == new_time:
                 print("Completed")
                 break
             _, img = cap.read()
-            img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-            results = pose.process(img_rgb)
-            # print(results.pose_landmarks)
-            if results.pose_landmarks:
-                mp_draw.draw_landmarks(img, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
-                for _, lm in enumerate(results.pose_landmarks.landmark):
-                    h, w, c = img.shape
-                    # print(lm)
-                    cx, cy = int(lm.x * w), int(lm.y * h)
-                    cv2.circle(img, (cx, cy), 5, (255, 0, 0), cv2.FILLED)
-            cv2.imshow("Image", img)
+            # show the image in to frame
+            # cv2.imshow("Image", img)
+            # save image in to given path
             cv2.imwrite(filename=file_name, img=img)
-            cv2.waitKey(1)
-            time.sleep(1)
+            # cv2.waitKey(1)
 
 
 if __name__ == '__main__':
